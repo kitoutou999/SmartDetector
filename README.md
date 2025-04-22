@@ -1,0 +1,2 @@
+# SmartDetector
+Easy player detector
