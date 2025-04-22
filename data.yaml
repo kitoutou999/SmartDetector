@@ -1,0 +1,41 @@
+# Chemin des données (à vérifier selon votre structure réelle)
+# data.yaml
+train: 
+  - dataset/train/images
+  - dataset/negatives/images 
+val: dataset/valid/images
+test: dataset/test/images
+
+# Paramètres essentiels
+nc: 4
+names: ['CT', 'CT_HEAD', 'T', 'T_HEAD']
+
+# Nouveaux paramètres ajoutés pour l'optimisation
+# ----------------------------------------------
+# 1. Augmentations personnalisées pour CS:GO
+augmentations:
+  hsv_h: 0.05  # Augmenté pour varier les environnements lumineux
+  hsv_s: 0.7   
+  hsv_v: 0.4
+  degrees: 0.0  # Rotation désactivée (peu réaliste en FPS)
+  translate: 0.1  # Augmenté pour simuler le mouvement
+  scale: 0.3
+  mixup: 0.3  # Augmenté pour mieux gérer les overlays
+  copy_paste: 0.2  # Nouvelle augmentation clé pour les occlusions
+
+# 2. Configuration des ancres personnalisées (adaptées aux personnages CS:GO)
+anchors:
+  - [3,5,  6,8,  12,16]  # Ratios adaptés aux hitboxes verticales
+  - [18,24,  28,36,  42,55]  # Pour les têtes et corps proches
+
+# 3. Configuration avancée
+autoanchor: False  # Désactivé car nous utilisons des ancres custom
+dataloader_workers: 8
+cache: ram  # Accélère le chargement si suffisamment de RAM disponible
+
+# 4. Distribution des classes 
+# [CT, CT_HEAD, T, T_HEAD]
+class_weights: [1.0, 3.0, 1.0, 3.0]  # Poids accru pour les têtes
+
+# 5. Validation améliorée
+val_mode: fast  # Optimisé pour la vitesse sans perte de précision
